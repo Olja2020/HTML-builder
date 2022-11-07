@@ -1,6 +1,5 @@
 const fs= require('fs');
 const path=require('path');
-const http = require ("http");
 
 const componentsPath= path.join(__dirname, 'components');
 const articlesPath= path.join(componentsPath, 'articles.html');
@@ -26,4 +25,33 @@ const folderPath= path.join(__dirname, 'styles');
         
       }
      }   
+      });
+
+      const templatePath= path.join(__dirname, 'template.html');
+      fs.readFile(templatePath, {encoding: "utf8"}, (err,data)=>{
+          if(err)throw err;
+          
+      fs.readFile(footerPath, {encoding: "utf8"}, (err,data1)=>{
+          if(err)throw err;
+
+          fs.readFile(articlesPath, {encoding: "utf8"}, (err, data2)=>{
+              if(err)throw err;
+
+              fs.readFile(headerPath, {encoding: "utf8"}, (err,data3)=>{
+                  if(err)throw err;
+     
+       const templateFile = data.replace("{{footer}}", data1).replace ("{{header}}", data3).replace("{{articles}}", data2);
+       fs.writeFile('06-build-page/project-dist/index.html', templateFile, (err)=>{
+           if(err)throw err;
+          });	
+        });
+      });
+  });
+});
+      
+const assetsPath= path.join(__dirname, 'assets');
+const assetsPathCopy= path.join(__dirname, 'project-dist/assets');
+const fse=require('fs-extra');
+fse.copy(assetsPath, assetsPathCopy, err=>{
+        if(err)throw err;
       });
